@@ -5,6 +5,7 @@ from json import JSONDecodeError
 from multiprocessing import Process
 from typing import Dict
 
+from ChangePassword import ChangePassword
 from ControllerDlinkBackup import ControllerDlinkBackup
 from Model import Model
 from Network import Network
@@ -20,15 +21,20 @@ class ControllerMain:
 
     def set_sys_argv(self, sys_argv):
         if self.file_settings_exists('settings'):
+            path_work_directory = self.delete_last_object_in_path(sys_argv[0])
+            parameter = sys_argv[1]
+            ip_range = sys_argv[2]
+            args = {'parameter': parameter, 'ip_range': ip_range, 'path_work_directory': path_work_directory}
             if 'dlink_backup' in sys_argv:
                 controller_dlink_backup = ControllerDlinkBackup(self)
-                path_work_directory = self.delete_last_object_in_path(sys_argv[0])
-                parameter = sys_argv[1]
-                ip_range = sys_argv[2]
                 ip_dst_for_backup = sys_argv[3]
-                args = {'parameter': parameter, 'ip_range': ip_range, 'ip_dst_for_backup': ip_dst_for_backup,
-                        'path_work_directory': path_work_directory}
+                args['ip_dst_for_backup'] = ip_dst_for_backup
                 self.create_async_network_processes_from_ip_range(args, controller_dlink_backup.make_dlink_backup)
+            elif 'change_password' in sys_argv:
+                change_password = ChangePassword(self)
+                new_password = sys_argv[3]
+                args['new_password'] = new_password
+                self.create_async_network_processes_from_ip_range(change_password.)
             else:
                 print('Неверная команда')
         else:
@@ -159,7 +165,8 @@ class ControllerMain:
     @staticmethod
     def check_ip_range_correct(third_octet_in_start_range, third_octet_in_end_ip_range,
                                last_octet_in_start_ip_range, last_octet_in_end_ip_range):
-        if third_octet_in_start_range <= third_octet_in_end_ip_range and last_octet_in_start_ip_range <= last_octet_in_end_ip_range:
+        if third_octet_in_start_range <= third_octet_in_end_ip_range and \
+                last_octet_in_start_ip_range <= last_octet_in_end_ip_range:
             return True
         else:
             return False

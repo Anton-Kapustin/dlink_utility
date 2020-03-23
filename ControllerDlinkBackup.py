@@ -1,5 +1,4 @@
 import re
-from multiprocessing import Process
 
 
 class ControllerDlinkBackup:
@@ -43,7 +42,8 @@ class ControllerDlinkBackup:
 
     def make_cmd_for_backup_for_different_dlink_switches(self, dlink_model, ip_address, ip_dst_for_backup):
         dlink_model = re.sub('[/]', '', dlink_model)
-        backup_name = ip_address + '\\' + ip_address + '_' + dlink_model + '_' + self.controller_main.get_date_in_string()
+        backup_name = ip_address + '\\' + ip_address + '_' + dlink_model + '_' + \
+                      self.controller_main.get_date_in_string()
         cmd = ''
         if dlink_model:
             if '3200' in dlink_model or '3000' in dlink_model or '1510' in dlink_model or '3120' in dlink_model:

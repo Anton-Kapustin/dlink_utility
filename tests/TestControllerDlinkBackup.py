@@ -1,7 +1,6 @@
 import re
 import unittest
 from unittest.mock import patch
-
 from ControllerDlinkBackup import ControllerDlinkBackup
 from ControllerMain import ControllerMain
 
