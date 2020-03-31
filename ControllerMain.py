@@ -4,7 +4,6 @@ import re
 from json import JSONDecodeError
 from multiprocessing import Process
 from typing import Dict
-
 from ChangePassword import ChangePassword
 from ControllerDlinkBackup import ControllerDlinkBackup
 from Model import Model
@@ -32,9 +31,11 @@ class ControllerMain:
                 self.create_async_network_processes_from_ip_range(args, controller_dlink_backup.make_dlink_backup)
             elif 'change_password' in sys_argv:
                 change_password = ChangePassword(self)
-                new_password = sys_argv[3]
+                login_for_new_password = sys_argv[3]
+                args['login_for_new_password'] = login_for_new_password
+                new_password = sys_argv[4]
                 args['new_password'] = new_password
-                self.create_async_network_processes_from_ip_range(change_password.)
+                self.create_async_network_processes_from_ip_range(args, change_password.change_password_dlink)
             else:
                 print('Неверная команда')
         else:
@@ -65,6 +66,7 @@ class ControllerMain:
                                 if self.check_string_contain_item_from_list(response_from_login,
                                                                             list_words_after_login):
                                     authorised = True
+                                    self.model.set_current_password(password)
                                     break
                             except TypeError as err:
                                 print(err)
@@ -86,6 +88,7 @@ class ControllerMain:
                 network_async_process = Process(target=function_for_call, args=(ip_address, args))
                 network_async_process.start()
                 dict_ip_with_process_event_queue[ip_address] = network_async_process
+                print(dict_ip_with_process_event_queue)
         while True:
             stop_while = False
             dict_copy = dict_ip_with_process_event_queue.copy()
@@ -156,11 +159,17 @@ class ControllerMain:
         response = self.network.receive_data_until(list_read_expect)
         return response
 
+    def network_recieve_data(self):
+        return self.network.recieve_data()
+
     def network_close_connection(self):
         self.network.close_conection()
 
     def get_dlink_model(self):
         return self.model.get_dlink_model()
+
+    def get_current_password(self):
+        return self.model.get_current_password()
 
     @staticmethod
     def check_ip_range_correct(third_octet_in_start_range, third_octet_in_end_ip_range,

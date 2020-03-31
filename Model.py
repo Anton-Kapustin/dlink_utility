@@ -7,6 +7,13 @@ class Model:
         self.password_root = ''
         self.password_model_websmart = ''
         self.dlink_model = ''
+        self.current_password = ''
+
+    def set_current_password(self, current_password):
+        self.current_password = current_password
+
+    def get_current_password(self):
+        return self.current_password
 
     def set_login(self, login):
         self.login = login
