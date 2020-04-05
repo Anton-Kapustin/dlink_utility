@@ -23,8 +23,8 @@ class TestControllerMain(unittest.TestCase):
         mock_controller_send_data.return_value = True
         ip_range = ('172.1.0.0', '172.1.0.150')
         dlink_backup = ControllerDlinkBackup(self.controller)
-        args = {'parameter': 'dlink_backup', 'ip_range': '172.1.2.80,172.1.2.82',
-                'ip_dst_for_backup': '10.6.224.3',
+        args = {'parameter'          : 'dlink_backup', 'ip_range': '172.1.2.80,172.1.2.82',
+                'ip_dst_for_backup'  : '10.6.224.3',
                 'path_work_directory': '/Users/toxa/PycharmProjects/dlink_utility/'}
         return_result = self.controller.create_async_network_processes_from_ip_range(args,
                                                                                      dlink_backup.make_dlink_backup)
@@ -36,7 +36,8 @@ class TestControllerMain(unittest.TestCase):
     @patch('Model.Model.get_password_list')
     @patch('Network.Network.connect')
     @patch('Network.Network.login')
-    def test_authorisation_with_dlink_auccessful(self, mock_network_login, mock_network_connect, mock_get_password_list):
+    def test_authorisation_with_dlink_auccessful(self, mock_network_login, mock_network_connect,
+                                                 mock_get_password_list):
         mock_network_connect.return_value = b'DGS-1210-10P/ME UserName:'
         mock_network_login.return_value = b'DGS-1210-10P/ME:5#'
         mock_get_password_list.return_value = ['1', '2']
@@ -47,7 +48,8 @@ class TestControllerMain(unittest.TestCase):
     @patch('Model.Model.get_password_list')
     @patch('Network.Network.connect')
     @patch('Network.Network.login')
-    def test_authorisation_with_dlink_incorrect_login(self, mock_network_login, mock_network_connect, mock_get_password_list):
+    def test_authorisation_with_dlink_incorrect_login(self, mock_network_login, mock_network_connect,
+                                                      mock_get_password_list):
         mock_network_connect.return_value = b'DGS-1210-10P/ME UserName:'
         mock_network_login.return_value = b'Incorrect'
         mock_get_password_list.return_value = ['1', '2']
@@ -61,7 +63,8 @@ class TestControllerMain(unittest.TestCase):
     @patch('Model.Model.get_password_list')
     @patch('Network.Network.connect')
     @patch('Network.Network.login')
-    def test_authorisation_with_dlink_incorrect_response_from_connect(self, mock_network_login, mock_network_connect, mock_get_password_list):
+    def test_authorisation_with_dlink_incorrect_response_from_connect(self, mock_network_login, mock_network_connect,
+                                                                      mock_get_password_list):
         mock_network_connect.return_value = b'dangerfield'
         mock_network_login.return_value = b'DGS-1210-10P/ME:5#'
         mock_get_password_list.return_value = ['1', '2']
@@ -72,7 +75,8 @@ class TestControllerMain(unittest.TestCase):
     @patch('Model.Model.get_password_list')
     @patch('Network.Network.connect')
     @patch('Network.Network.login')
-    def test_authorisation_with_dlink_incorrect_response_from_login(self, mock_network_login, mock_network_connect, mock_get_password_list):
+    def test_authorisation_with_dlink_incorrect_response_from_login(self, mock_network_login, mock_network_connect,
+                                                                    mock_get_password_list):
         mock_network_connect.return_value = b'DGS-1210-10P/ME UserName:'
         mock_network_login.return_value = b'sdfk;lsdf'
         mock_get_password_list.return_value = ['1', '2']
@@ -83,7 +87,8 @@ class TestControllerMain(unittest.TestCase):
     @patch('Model.Model.get_password_list')
     @patch('Network.Network.connect')
     @patch('Network.Network.login')
-    def test_authorisation_with_dlink_incorrect_password(self, mock_network_login, mock_network_connect, mock_get_password_list):
+    def test_authorisation_with_dlink_incorrect_password(self, mock_network_login, mock_network_connect,
+                                                         mock_get_password_list):
         mock_network_connect.return_value = b'DGS-1210-10P/ME UserName:'
         mock_network_login.return_value = b'incorrect'
         mock_get_password_list.return_value = ['1', '2']

@@ -1,5 +1,5 @@
-from telnetlib import Telnet
 import re
+from telnetlib import Telnet
 
 
 class Network:
@@ -115,5 +115,3 @@ class Network:
                 elif dlink_model in checking_string_decoded:
                     is_dlink_model = True
         return is_dlink_model
-
-

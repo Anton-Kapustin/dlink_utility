@@ -1,6 +1,7 @@
 import re
 import unittest
 from unittest.mock import patch
+
 from ControllerDlinkBackup import ControllerDlinkBackup
 from ControllerMain import ControllerMain
 
@@ -9,8 +10,8 @@ class TestControllerDlinkBackup(unittest.TestCase):
 
     def setUp(self):
         self.controllerMain = ControllerMain('')
-        self.args = {'parameter': 'dlink_backup', 'ip_range': '172.1.2.80,172.1.2.82',
-                     'ip_dst_for_backup': '10.6.224.3',
+        self.args = {'parameter'          : 'dlink_backup', 'ip_range': '172.1.2.80,172.1.2.82',
+                     'ip_dst_for_backup'  : '10.6.224.3',
                      'path_work_directory': '/Users/toxa/PycharmProjects/dlink_utility/'}
         self.controllerDlinkBackup = ControllerDlinkBackup(self.controllerMain)
 
