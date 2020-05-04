@@ -1,6 +1,6 @@
 import unittest
 
-from ControllerMain import ControllerMain
+from Controllers.ControllerMain import ControllerMain
 
 
 class TestParsingDlinkModelName(unittest.TestCase):

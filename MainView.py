@@ -1,6 +1,6 @@
 import sys
 
-from ControllerMain import ControllerMain
+from Controllers.ControllerMain import ControllerMain
 
 
 class MainView:

@@ -2,8 +2,8 @@ import unittest
 from datetime import datetime
 from unittest.mock import patch
 
-from ControllerDlinkBackup import ControllerDlinkBackup
-from ControllerMain import ControllerMain
+from Controllers.ControllerDlinkBackup import ControllerDlinkBackup
+from Controllers.ControllerMain import ControllerMain
 
 
 class TestControllerMain(unittest.TestCase):

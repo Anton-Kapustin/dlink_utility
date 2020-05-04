@@ -8,6 +8,14 @@ class Model:
         self.password_model_websmart = ''
         self.dlink_model = ''
         self.current_password = ''
+        self.mac_on_ports: dict = {}
+
+    def set_mac_on_ports(self, mac_on_ports):
+        if mac_on_ports:
+            self.mac_on_ports.update(mac_on_ports)
+
+    def get_mac_on_ports(self):
+        return self.mac_on_ports
 
     def set_current_password(self, current_password):
         self.current_password = current_password

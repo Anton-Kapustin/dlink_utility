@@ -1,9 +1,11 @@
 import re
 
+from Controllers import ControllerMain
+
 
 class ControllerDlinkBackup:
 
-    def __init__(self, controller_main):
+    def __init__(self, controller_main: ControllerMain):
         self.controller_main = controller_main
 
     # ------------------------------------------------------------------------------------------------------------------

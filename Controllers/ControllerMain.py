@@ -5,14 +5,15 @@ from datetime import datetime
 from json import JSONDecodeError
 from multiprocessing import Process
 from typing import Dict
-
-from ChangePassword import ChangePassword
-from ControllerDlinkBackup import ControllerDlinkBackup
 from Model import Model
 from Network import Network
+from Controllers.ControllersInterface import InterfaceControllerMain
 
 
-class ControllerMain:
+class ControllerMain(InterfaceControllerMain):
+
+    def get_model(self):
+        return self.model
 
     def __init__(self, view):
         self.view = view
@@ -20,7 +21,8 @@ class ControllerMain:
         self.model = Model()
 
     def set_sys_argv(self, sys_argv):
-        if self.file_settings_exists('settings'):
+        print(sys_argv)
+        if self.file_settings_exists('./settings'):
             path_work_directory = self.delete_last_object_in_path(sys_argv[0])
             parameter = sys_argv[1]
             ip_range = sys_argv[2]
@@ -37,6 +39,11 @@ class ControllerMain:
                 new_password = sys_argv[4]
                 args['new_password'] = new_password
                 self.create_async_network_processes_from_ip_range(args, change_password.change_password_dlink)
+            elif 'mac_on_port':
+                print(sys_argv)
+                args['ports'] = sys_argv[3]
+                operations_with_ports = OperationsWithPorts(self)
+                self.create_async_network_processes_from_ip_range(args, operations_with_ports.get_mac_on_port)
             else:
                 print('Неверная команда')
         else:
@@ -315,3 +322,8 @@ class ControllerMain:
         except AttributeError as err:
             print(err)
         return file_settings_exists
+
+
+from Controllers.OperationsWithPorts import OperationsWithPorts
+from Controllers.ChangePassword import ChangePassword
+from Controllers.ControllerDlinkBackup import ControllerDlinkBackup

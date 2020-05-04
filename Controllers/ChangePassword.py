@@ -1,6 +1,9 @@
+from Controllers import ControllerMain
+
+
 class ChangePassword:
 
-    def __init__(self, controller_main):
+    def __init__(self, controller_main: ControllerMain):
         self.controller = controller_main
 
     def change_password_dlink(self, ip_address, args):

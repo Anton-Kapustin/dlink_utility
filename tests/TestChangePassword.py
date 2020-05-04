@@ -1,8 +1,8 @@
 import unittest
 from unittest.mock import patch
 
-from ChangePassword import ChangePassword
-from ControllerMain import ControllerMain
+from Controllers.ChangePassword import ChangePassword
+from Controllers.ControllerMain import ControllerMain
 
 
 class TestChangePassword(unittest.TestCase):
