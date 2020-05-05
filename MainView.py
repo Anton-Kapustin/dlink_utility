@@ -10,6 +10,9 @@ class MainView:
         self.controller.set_sys_argv(argv)
         # print(argv)
 
+    def show_data(self, data):
+        print(data)
+
 
 if __name__ == '__main__':
     view = MainView(sys.argv)

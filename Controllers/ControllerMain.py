@@ -5,6 +5,7 @@ from datetime import datetime
 from json import JSONDecodeError
 from multiprocessing import Process
 from typing import Dict
+
 from Model import Model
 from Network import Network
 from Controllers.ControllersInterface import InterfaceControllerMain
@@ -12,13 +13,16 @@ from Controllers.ControllersInterface import InterfaceControllerMain
 
 class ControllerMain(InterfaceControllerMain):
 
-    def get_model(self):
-        return self.model
-
     def __init__(self, view):
         self.view = view
         self.network = Network()
         self.model = Model()
+
+    def show_data_in_view(self, data):
+        self.view.show_data(data)
+
+    def get_model(self):
+        return self.model
 
     def set_sys_argv(self, sys_argv):
         print(sys_argv)
@@ -263,6 +267,23 @@ class ControllerMain(InterfaceControllerMain):
             file_log = open(log_file_path, write_parameter)
             file_log.write(string_to_write + '\n')
             file_log.close()
+            result = True
+        except OSError as err:
+            print(err)
+            result = False
+        return result
+
+    def write_data_to_file(self, path, data, write_parameter):
+        # print(path)
+        try:
+            os.stat(path)
+        except OSError as err:
+            print(err)
+            os.mkdir(path)
+        try:
+            file = open(path, write_parameter)
+            file.write(data + '\n')
+            file.close()
             result = True
         except OSError as err:
             print(err)

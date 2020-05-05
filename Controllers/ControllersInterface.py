@@ -52,6 +52,14 @@ class InterfaceControllerMain(ABC):
     def get_model(self):
         pass
 
+    @abstractmethod
+    def write_data_to_file(self, path, data, write_parameter):
+        pass
+
+    @abstractmethod
+    def show_data_in_view(self, data):
+        pass
+
 
 class InterfaceOperationsWithPorts(ABC):
     __metaclass__ = ABCMeta
@@ -70,5 +78,9 @@ class InterfaceOperationsWithPorts(ABC):
 
     @abstractmethod
     def check_port_range(self, port_range):
+        pass
+
+    @abstractmethod
+    def show_mac_on_ports(self, mac_on_ports):
         pass
 

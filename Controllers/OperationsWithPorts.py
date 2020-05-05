@@ -24,7 +24,7 @@ class OperationsWithPorts(InterfaceOperationsWithPorts):
         self.controller = controller
 
     def get_mac_on_port(self, ip_address, args):
-        mac_on_port = {}
+        mac_on_port = {ip_address: {}}
         print(ip_address)
         if ip_address:
             ports_range = self.check_port_range(args['ports'])
@@ -43,10 +43,20 @@ class OperationsWithPorts(InterfaceOperationsWithPorts):
                         data = self.controller.network_receive_data_until(list_read_until)
                         if data:
                             mac_list = self.match_mac_from_response(data)
-                            mac_on_port[port] = mac_list
+                            mac_on_port[ip_address][port] = mac_list
                             model = self.controller.get_model()
                             model.set_mac_on_ports(mac_on_port)
+        self.show_mac_on_ports(mac_on_port)
         return mac_on_port
+
+    def show_mac_on_ports(self, mac_on_ports):
+        if mac_on_ports:
+            for ip in mac_on_ports:
+                self.controller.show_data_in_view(ip)
+                for port in mac_on_ports[ip]:
+                    self.controller.show_data_in_view(port)
+                    for mac in mac_on_ports[ip][port]:
+                        self.controller.show_data_in_view(mac)
 
     def match_mac_from_response(self, response):
         mac_list = []
