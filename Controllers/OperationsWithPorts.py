@@ -24,6 +24,7 @@ class OperationsWithPorts(InterfaceOperationsWithPorts):
         self.controller = controller
 
     def get_mac_on_port(self, ip_address, args):
+        mac_on_port = {}
         print(ip_address)
         if ip_address:
             ports_range = self.check_port_range(args['ports'])
@@ -42,18 +43,16 @@ class OperationsWithPorts(InterfaceOperationsWithPorts):
                         data = self.controller.network_receive_data_until(list_read_until)
                         if data:
                             mac_list = self.match_mac_from_response(data)
-                            mac_on_port = {port: mac_list}
+                            mac_on_port[port] = mac_list
                             model = self.controller.get_model()
                             model.set_mac_on_ports(mac_on_port)
-                            print(model.get_mac_on_ports())
-                            return mac_on_port
+        return mac_on_port
 
     def match_mac_from_response(self, response):
         mac_list = []
         if response:
             regex = r"[0-9A-Fa-f]{2}-[0-9A-Fa-f]{2}-[0-9A-Fa-f]{2}-[0-9A-Fa-f]{2}-[0-9A-Fa-f]{2}-[0-9A-Fa-f]{2}"
             mac_list = re.findall(regex, response.decode('utf-8'))
-            print(mac_list)
         return mac_list
 
     def get_ports_number_from_model(self, model):

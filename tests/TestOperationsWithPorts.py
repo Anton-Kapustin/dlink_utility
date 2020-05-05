@@ -30,7 +30,9 @@ class MyTestCase(unittest.TestCase):
         args = {'ports': '0-20'}
         mock_get_dlink_model.return_value = 'DGS-1210-10P/ME'
         mock_sys_exit.return_value = True
-        correct_answer = {1: ['00-C0-34-DA-00-00']}
+        correct_answer = {}
+        for port in range(1, 11):
+            correct_answer[port] = ['00-C0-34-DA-00-00']
         mac_list = self.operations_with_ports.get_mac_on_port(ip_address, args)
         self.assertEqual(correct_answer, mac_list)
 
