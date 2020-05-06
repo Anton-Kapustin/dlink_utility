@@ -113,6 +113,10 @@ class ControllerMain(InterfaceControllerMain):
                     stop_while = True
             if stop_while:
                 break
+        if 'mac_on_port' in args['parameter']:
+            mac_on_ports_dict = self.model.get_mac_on_ports()
+            self.show_data_in_view(mac_on_ports_dict)
+            self.write_sorted_dict_to_file('mac_on_ports.txt', mac_on_ports_dict, 'w+')
         return dict_copy
 
     def make_network_address(self, ip_range):
@@ -279,10 +283,36 @@ class ControllerMain(InterfaceControllerMain):
             os.stat(path)
         except OSError as err:
             print(err)
-            os.mkdir(path)
         try:
             file = open(path, write_parameter)
             file.write(data + '\n')
+            file.close()
+            result = True
+        except OSError as err:
+            print(err)
+            result = False
+        return result
+
+    @staticmethod
+    def write_sorted_dict_to_file(path, dict_to_write: dict, write_parameter):
+        # print(path)
+        try:
+            os.stat(path)
+        except OSError as err:
+            print(err)
+        try:
+            file = open(path, write_parameter)
+            i = 0
+            for ip in sorted(dict_to_write.keys()):
+                if i > 0:
+                    file.write('\n')
+                file.write(ip + '\n')
+                i += 1
+                j = 0
+                for port, mac_list in dict_to_write[ip].items():
+                    file.write(str(port) + ' port:\n')
+                    for mac in mac_list:
+                        file.write(mac + '\n')
             file.close()
             result = True
         except OSError as err:

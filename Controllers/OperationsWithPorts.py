@@ -46,17 +46,7 @@ class OperationsWithPorts(InterfaceOperationsWithPorts):
                             mac_on_port[ip_address][port] = mac_list
                             model = self.controller.get_model()
                             model.set_mac_on_ports(mac_on_port)
-        self.show_mac_on_ports(mac_on_port)
         return mac_on_port
-
-    def show_mac_on_ports(self, mac_on_ports):
-        if mac_on_ports:
-            for ip in mac_on_ports:
-                self.controller.show_data_in_view(ip)
-                for port in mac_on_ports[ip]:
-                    self.controller.show_data_in_view(port)
-                    for mac in mac_on_ports[ip][port]:
-                        self.controller.show_data_in_view(mac)
 
     def match_mac_from_response(self, response):
         mac_list = []

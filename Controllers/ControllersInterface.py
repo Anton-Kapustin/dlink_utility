@@ -80,7 +80,3 @@ class InterfaceOperationsWithPorts(ABC):
     def check_port_range(self, port_range):
         pass
 
-    @abstractmethod
-    def show_mac_on_ports(self, mac_on_ports):
-        pass
-
