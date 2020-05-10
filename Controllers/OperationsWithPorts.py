@@ -1,10 +1,16 @@
 import re
+from multiprocessing import Event
+from multiprocessing.queues import Queue
+from time import sleep
 
 from Controllers.ControllerMain import ControllerMain
 from Controllers.ControllersInterface import InterfaceOperationsWithPorts
 
 
 class OperationsWithPorts(InterfaceOperationsWithPorts):
+
+    def __init__(self, controller: ControllerMain):
+        self.controller = controller
 
     def check_port_range(self, ports_range):
         ports_range = ports_range.split('-')
@@ -20,14 +26,13 @@ class OperationsWithPorts(InterfaceOperationsWithPorts):
                 ports_range = None
         return ports_range
 
-    def __init__(self, controller: ControllerMain):
-        self.controller = controller
-
     def get_mac_on_port(self, ip_address, args):
         mac_on_port = {ip_address: {}}
-        print(ip_address)
+        # print(ip_address)
         if ip_address:
             ports_range = self.check_port_range(args['ports'])
+            queue: Queue = args['queue']
+            event: Event = args['event']
             if ports_range:
                 first_port = ports_range[0]
                 last_port = ports_range[1]
@@ -44,8 +49,9 @@ class OperationsWithPorts(InterfaceOperationsWithPorts):
                         if data:
                             mac_list = self.match_mac_from_response(data)
                             mac_on_port[ip_address][port] = mac_list
-                            model = self.controller.get_model()
-                            model.set_mac_on_ports(mac_on_port)
+
+        queue.put(mac_on_port)
+        event.set()
         return mac_on_port
 
     def match_mac_from_response(self, response):
