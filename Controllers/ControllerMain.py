@@ -61,7 +61,7 @@ class ControllerMain(InterfaceControllerMain):
                             self.model.set_mac_on_ports(mac_on_ports)
                             proc.join()
                             break
-                path_to_write = sys_argv[0] + 'mac_on_ports.txt'
+                path_to_write = path_work_directory + 'mac_on_ports.txt'
                 self.write_sorted_dict_to_file(path_to_write, self.model.get_mac_on_ports(), 'w+')
             else:
                 print('Неверная команда')
