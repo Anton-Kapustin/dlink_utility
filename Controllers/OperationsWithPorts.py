@@ -1,7 +1,6 @@
 import re
 from multiprocessing import Event
 from multiprocessing.queues import Queue
-from time import sleep
 
 from Controllers.ControllerMain import ControllerMain
 from Controllers.ControllersInterface import InterfaceOperationsWithPorts
@@ -38,18 +37,22 @@ class OperationsWithPorts(InterfaceOperationsWithPorts):
                 last_port = ports_range[1]
                 if self.controller.authorisation(ip_address):
                     dlink_model = self.controller.get_dlink_model()
-                    dlink_ports = self.get_ports_number_from_model(dlink_model)
-                    if last_port > dlink_ports:
-                        last_port = dlink_ports
-                    for port in range(first_port, last_port + 1):
-                        cmd = 'show fdb port ' + str(port) + '\n'
-                        self.controller.network_send_data(cmd)
-                        list_read_until = [b'Next', b'NEXT', b'#']
-                        data = self.controller.network_receive_data_until(list_read_until)
-                        if data:
-                            mac_list = self.match_mac_from_response(data)
-                            mac_on_port[ip_address][port] = mac_list
-
+                    if not self.controller.is_web_smart_model(dlink_model):
+                        dlink_ports = self.get_ports_number_from_model(dlink_model)
+                        if last_port > dlink_ports:
+                            last_port = dlink_ports
+                        for port in range(first_port, last_port + 1):
+                            cmd = 'show fdb port ' + str(port) + '\n'
+                            self.controller.network_send_data(cmd)
+                            list_read_until = [b'Next', b'NEXT', b'#']
+                            data = self.controller.network_receive_data_until(list_read_until)
+                            if data:
+                                if self.controller.check_string_contain_item_from_list(data, list_read_until):
+                                    self.controller.network_send_data('q\n')
+                                mac_list = self.match_mac_from_response(data)
+                                mac_on_port[ip_address][port] = mac_list
+                    else:
+                        mac_on_port[ip_address][0] = ['websmart']
         queue.put(mac_on_port)
         event.set()
         return mac_on_port
