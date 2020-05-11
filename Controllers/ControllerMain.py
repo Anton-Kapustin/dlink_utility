@@ -46,8 +46,8 @@ class ControllerMain(InterfaceControllerMain):
                 args['ports'] = sys_argv[3]
                 operations_with_ports = OperationsWithPorts(self)
                 dict_ip_with_process_event_queue = self.create_async_network_processes_from_ip_range(args,
-                                                                                         operations_with_ports.
-                                                                                         get_mac_on_port)
+                                                                                                     operations_with_ports.
+                                                                                                     get_mac_on_port)
                 for ip in dict_ip_with_process_event_queue.keys():
                     queue: Queue = dict_ip_with_process_event_queue[ip]['queue']
                     event: Event = dict_ip_with_process_event_queue[ip]['event']
@@ -97,42 +97,6 @@ class ControllerMain(InterfaceControllerMain):
                             count_try_to_login += 1
         return authorised
 
-    # def create_async_network_processes_from_ip_range(self, args, function_for_call):
-    #     ip_range = args['ip_range'].split(',')
-    #     path_work_directory = args['path_work_directory']
-    #     ip_addresses = self.make_network_address(ip_range)
-    #     dict_ip_with_process_event_queue: Dict[str, Process] = {}
-    #     if not self.write_to_log_file(path_work_directory, '', 'w'):
-    #         path_work_directory = None
-    #     for ip_address in ip_addresses:
-    #         if ip_address:
-    #             if path_work_directory:
-    #                 self.write_to_log_file(path_work_directory, '', 'w')
-    #             network_async_process = Process(target=function_for_call, args=(ip_address, args))
-    #             network_async_process.start()
-    #             dict_ip_with_process_event_queue[ip_address] = network_async_process
-    #             # print(dict_ip_with_process_event_queue)
-    #     while True:
-    #         stop_while = False
-    #         dict_copy = dict_ip_with_process_event_queue.copy()
-    #         for ip in dict_ip_with_process_event_queue.keys():
-    #             proc = dict_ip_with_process_event_queue[ip]
-    #             # print(ip + ' alive: ' + str(proc.is_alive()))
-    #             # print(self.model.get_mac_on_ports())
-    #             if not proc.is_alive():
-    #                 dict_copy.pop(ip)
-    #             dict_copy_size = len(dict_copy)
-    #             if dict_copy_size == 0:
-    #                 stop_while = True
-    #         if stop_while:
-    #             break
-    #     if 'mac_on_port' in args['parameter']:
-    #         mac_on_ports_dict = self.model.get_mac_on_ports()
-    #         # print(mac_on_ports_dict)
-    #         # self.show_data_in_view(mac_on_ports_dict)
-    #         self.write_sorted_dict_to_file('mac_on_ports.txt', mac_on_ports_dict, 'w+')
-    #     return dict_copy
-
     def create_async_network_processes_from_ip_range(self, args, function_for_call):
         ip_range = args['ip_range'].split(',')
         path_work_directory = args['path_work_directory']
@@ -151,7 +115,7 @@ class ControllerMain(InterfaceControllerMain):
                 network_async_process = Process(target=function_for_call, args=(ip_address, args))
                 network_async_process.start()
                 dict_ip_with_process_event_queue[ip_address] = {'process': network_async_process,
-                                                                 'queue': queue, 'event': event}
+                                                                'queue': queue, 'event': event}
         return dict_ip_with_process_event_queue
 
     def make_network_address(self, ip_range):
