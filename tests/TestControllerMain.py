@@ -11,10 +11,10 @@ class TestControllerMain(unittest.TestCase):
     def setUp(self):
         self.controller = ControllerMain('')
 
-    @patch('ControllerMain.ControllerMain.network_send_data')
-    @patch('ControllerMain.ControllerMain.network_receive_data_until')
+    @patch('Controllers.ControllerMain.ControllerMain.network_send_data')
+    @patch('Controllers.ControllerMain.ControllerMain.network_receive_data_until')
     @patch('Model.Model.get_dlink_model')
-    @patch('ControllerMain.ControllerMain.authorisation')
+    @patch('Controllers.ControllerMain.ControllerMain.authorisation')
     def test_create_async_process_from_ip_range(self, mock_authorisation, mock_get_dlink_model,
                                                 mock_controller_receive_data_until, mock_controller_send_data):
         mock_authorisation.return_value = True

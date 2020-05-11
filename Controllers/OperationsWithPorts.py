@@ -52,7 +52,6 @@ class OperationsWithPorts(InterfaceOperationsWithPorts):
                                 mac_list = self.match_mac_from_response(data)
                                 if mac_list:
                                     mac_on_port[ip_address][port] = mac_list
-                                    print(mac_on_port)
                     else:
                         mac_on_port[ip_address][0] = ['websmart']
             else:

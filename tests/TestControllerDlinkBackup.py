@@ -19,12 +19,12 @@ class TestControllerDlinkBackup(unittest.TestCase):
     # Test Make Dlink Backup
     # ==================================================================================================================
 
-    @patch('ControllerMain.ControllerMain.network_close_connection')
-    @patch('ControllerMain.ControllerMain.write_to_log_file')
-    @patch('ControllerDlinkBackup.ControllerDlinkBackup.make_cmd_for_backup_for_different_dlink_switches')
-    @patch('ControllerMain.ControllerMain.authorisation')
-    @patch('ControllerMain.ControllerMain.network_send_data')
-    @patch('ControllerMain.ControllerMain.network_receive_data_until')
+    @patch('Controllers.ControllerMain.ControllerMain.network_close_connection')
+    @patch('Controllers.ControllerMain.ControllerMain.write_to_log_file')
+    @patch('Controllers.ControllerDlinkBackup.ControllerDlinkBackup.make_cmd_for_backup_for_different_dlink_switches')
+    @patch('Controllers.ControllerMain.ControllerMain.authorisation')
+    @patch('Controllers.ControllerMain.ControllerMain.network_send_data')
+    @patch('Controllers.ControllerMain.ControllerMain.network_receive_data_until')
     @patch('sys.exit')
     def test_make_dlink_backup_with_fake_network_successful_result(self, mock_sys_exit, mock_network_receive_data_until,
                                                                    mock_network_send_data,
@@ -42,10 +42,10 @@ class TestControllerDlinkBackup(unittest.TestCase):
         return_result = self.controllerDlinkBackup.make_dlink_backup(ip_address, self.args)
         self.assertIsNone(return_result)
 
-    @patch('ControllerMain.ControllerMain.network_close_connection')
-    @patch('ControllerDlinkBackup.ControllerDlinkBackup.make_cmd_for_backup_for_different_dlink_switches')
-    @patch('ControllerMain.ControllerMain.authorisation')
-    @patch('ControllerMain.ControllerMain.network_send_data')
+    @patch('Controllers.ControllerMain.ControllerMain.network_close_connection')
+    @patch('Controllers.ControllerDlinkBackup.ControllerDlinkBackup.make_cmd_for_backup_for_different_dlink_switches')
+    @patch('Controllers.ControllerMain.ControllerMain.authorisation')
+    @patch('Controllers.ControllerMain.ControllerMain.network_send_data')
     @patch('sys.exit')
     def test_make_dlink_backup_with_fake_network_unsucceess_result(self, mock_sys_exit, mock_network_send_data,
                                                                    mock_controller_authorisation,
@@ -59,14 +59,14 @@ class TestControllerDlinkBackup(unittest.TestCase):
         return_result = self.controllerDlinkBackup.make_dlink_backup(ip_address, self.args)
         self.assertFalse(return_result)
 
-    @patch('ControllerMain.ControllerMain.network_close_connection')
-    @patch('ControllerMain.ControllerMain.check_folder_exists')
+    @patch('Controllers.ControllerMain.ControllerMain.network_close_connection')
+    @patch('Controllers.ControllerMain.ControllerMain.check_folder_exists')
     @patch('Model.Model.get_dlink_model')
-    @patch('ControllerMain.ControllerMain.write_to_log_file')
-    @patch('ControllerDlinkBackup.ControllerDlinkBackup.make_cmd_for_backup_for_different_dlink_switches')
-    @patch('ControllerMain.ControllerMain.authorisation')
-    @patch('ControllerMain.ControllerMain.network_send_data')
-    @patch('ControllerMain.ControllerMain.network_receive_data_until')
+    @patch('Controllers.ControllerMain.ControllerMain.write_to_log_file')
+    @patch('Controllers.ControllerDlinkBackup.ControllerDlinkBackup.make_cmd_for_backup_for_different_dlink_switches')
+    @patch('Controllers.ControllerMain.ControllerMain.authorisation')
+    @patch('Controllers.ControllerMain.ControllerMain.network_send_data')
+    @patch('Controllers.ControllerMain.ControllerMain.network_receive_data_until')
     @patch('sys.exit')
     def test_make_dlink_backup_with_fake_network_write_to_log_with_nonetype_response(self, mock_sys_exit,
                                                                                      mock_network_receive_data_until,
