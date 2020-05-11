@@ -8,7 +8,6 @@ class MainView:
     def __init__(self, argv):
         self.controller = ControllerMain(self)
         self.controller.set_sys_argv(argv)
-        # print(argv)
 
     def show_data(self, data):
         print(data)

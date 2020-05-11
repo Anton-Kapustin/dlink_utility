@@ -5,7 +5,6 @@ from datetime import datetime
 from json import JSONDecodeError
 from multiprocessing import Process, Queue, Event
 from typing import Dict
-
 from Model import Model
 from Network import Network
 from Controllers.ControllersInterface import InterfaceControllerMain
@@ -25,33 +24,31 @@ class ControllerMain(InterfaceControllerMain):
         return self.model
 
     def set_sys_argv(self, sys_argv):
-        print(sys_argv)
         if self.file_settings_exists('./settings'):
             path_work_directory = self.delete_last_object_in_path(sys_argv[0])
             parameter = sys_argv[1]
+            print(parameter)
             ip_range = sys_argv[2]
             args = {'parameter': parameter, 'ip_range': ip_range, 'path_work_directory': path_work_directory}
-            if 'dlink_backup' in sys_argv:
+            if 'dlink_backup' in parameter:
                 controller_dlink_backup = ControllerDlinkBackup(self)
                 ip_dst_for_backup = sys_argv[3]
                 args['ip_dst_for_backup'] = ip_dst_for_backup
                 self.create_async_network_processes_from_ip_range(args, controller_dlink_backup.make_dlink_backup)
-            elif 'change_password' in sys_argv:
+            elif 'change_password' in parameter:
                 change_password = ChangePassword(self)
                 login_for_new_password = sys_argv[3]
                 args['login_for_new_password'] = login_for_new_password
                 new_password = sys_argv[4]
                 args['new_password'] = new_password
                 self.create_async_network_processes_from_ip_range(args, change_password.change_password_dlink)
-            elif 'mac_on_port':
-                # print(sys_argv)
+            elif 'mac_on_port' in parameter:
                 args['ports'] = sys_argv[3]
                 operations_with_ports = OperationsWithPorts(self)
                 dict_ip_with_process_event_queue = self.create_async_network_processes_from_ip_range(args,
                                                                                          operations_with_ports.
                                                                                          get_mac_on_port)
                 for ip in dict_ip_with_process_event_queue.keys():
-                    # print(ip)
                     queue: Queue = dict_ip_with_process_event_queue[ip]['queue']
                     event: Event = dict_ip_with_process_event_queue[ip]['event']
                     proc: Process = dict_ip_with_process_event_queue[ip]['process']
@@ -98,7 +95,6 @@ class ControllerMain(InterfaceControllerMain):
                             except TypeError as err:
                                 print(err)
                             count_try_to_login += 1
-        # print(authorised)
         return authorised
 
     # def create_async_network_processes_from_ip_range(self, args, function_for_call):
@@ -334,7 +330,6 @@ class ControllerMain(InterfaceControllerMain):
 
     @staticmethod
     def write_sorted_dict_to_file(path, dict_to_write: dict, write_parameter):
-        print(path)
         try:
             os.stat(path)
         except OSError as err:

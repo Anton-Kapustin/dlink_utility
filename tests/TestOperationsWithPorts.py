@@ -1,4 +1,6 @@
 import unittest
+from multiprocessing.synchronize import Event
+from multiprocessing.queues import Queue
 from unittest.mock import patch
 
 from Controllers.ControllerMain import ControllerMain
@@ -16,6 +18,8 @@ class MyTestCase(unittest.TestCase):
                      'path_work_directory': '/Users/toxa/PycharmProjects/dlink_utility/'}
         self.operations_with_ports = OperationsWithPorts(controller)
 
+    @patch('multiprocessing.synchronize.Event.set')
+    @patch('multiprocessing.queues.Queue.put')
     @patch('sys.exit')
     @patch('Controllers.ControllerMain.ControllerMain.get_dlink_model')
     @patch('Controllers.ControllerMain.ControllerMain.network_close_connection')
@@ -23,18 +27,71 @@ class MyTestCase(unittest.TestCase):
     @patch('Controllers.ControllerMain.ControllerMain.network_send_data')
     @patch('Controllers.ControllerMain.ControllerMain.network_receive_data_until')
     def test_get_mac_on_port_correct_mac(self, mock_receive_data_until, mock_send_data, mock_authorisation,
-                                         mock_close_connection, mock_get_dlink_model, mock_sys_exit):
+                                         mock_close_connection, mock_get_dlink_model, mock_sys_exit, mock_queue_put,
+                                         mock_event_set):
         mock_receive_data_until.return_value = b'kjhkjhskdf00-C0-34-DA-00-00'
         mock_send_data.return_value = True
         mock_authorisation.return_value = True
         mock_close_connection.return_value = True
+        mock_queue_put.return_value = True
+        mock_event_set.side_effect = [True]
         ip_address = '192.168.1.1'
-        args = {'ports': '0-20'}
+        args = {'ports': '0-20', 'queue': Queue, 'event': Event}
         mock_get_dlink_model.return_value = 'DGS-1210-10P/ME'
         mock_sys_exit.return_value = True
         correct_answer = {ip_address: {}}
         for port in range(1, 11):
             correct_answer[ip_address][port] = ['00-C0-34-DA-00-00']
+        mac_list = self.operations_with_ports.get_mac_on_port(ip_address, args)
+        self.assertEqual(correct_answer, mac_list)
+
+    @patch('multiprocessing.synchronize.Event.set')
+    @patch('multiprocessing.queues.Queue.put')
+    @patch('sys.exit')
+    @patch('Controllers.ControllerMain.ControllerMain.get_dlink_model')
+    @patch('Controllers.ControllerMain.ControllerMain.network_close_connection')
+    @patch('Controllers.ControllerMain.ControllerMain.authorisation')
+    @patch('Controllers.ControllerMain.ControllerMain.network_send_data')
+    @patch('Controllers.ControllerMain.ControllerMain.network_receive_data_until')
+    def test_get_mac_on_port_incorrect_mac(self, mock_receive_data_until, mock_send_data, mock_authorisation,
+                                           mock_close_connection, mock_get_dlink_model, mock_sys_exit, mock_queue_put,
+                                           mock_event_set):
+        mock_receive_data_until.return_value = b'kjhkjhskdf00-C0-34-DA-00-0'
+        mock_send_data.return_value = True
+        mock_authorisation.return_value = True
+        mock_close_connection.return_value = True
+        mock_queue_put.return_value = True
+        mock_event_set.side_effect = [True]
+        ip_address = '192.168.1.1'
+        args = {'ports': '0-20', 'queue': Queue, 'event': Event}
+        mock_get_dlink_model.return_value = 'DGS-1210-10P/ME'
+        mock_sys_exit.return_value = True
+        correct_answer = {ip_address: {}}
+        mac_list = self.operations_with_ports.get_mac_on_port(ip_address, args)
+        self.assertEqual(correct_answer, mac_list)
+
+    @patch('multiprocessing.synchronize.Event.set')
+    @patch('multiprocessing.queues.Queue.put')
+    @patch('sys.exit')
+    @patch('Controllers.ControllerMain.ControllerMain.get_dlink_model')
+    @patch('Controllers.ControllerMain.ControllerMain.network_close_connection')
+    @patch('Controllers.ControllerMain.ControllerMain.authorisation')
+    @patch('Controllers.ControllerMain.ControllerMain.network_send_data')
+    @patch('Controllers.ControllerMain.ControllerMain.network_receive_data_until')
+    def test_get_mac_on_port_websmart_switch(self, mock_receive_data_until, mock_send_data, mock_authorisation,
+                                             mock_close_connection, mock_get_dlink_model, mock_sys_exit, mock_queue_put,
+                                             mock_event_set):
+        mock_receive_data_until.return_value = b'kjhkjhskdf00-C0-34-DA-00-0'
+        mock_send_data.return_value = True
+        mock_authorisation.return_value = True
+        mock_close_connection.return_value = True
+        mock_queue_put.return_value = True
+        mock_event_set.side_effect = [True]
+        ip_address = '192.168.1.1'
+        args = {'ports': '0-20', 'queue': Queue, 'event': Event}
+        mock_get_dlink_model.return_value = 'DGS-1210-10P'
+        mock_sys_exit.return_value = True
+        correct_answer = {ip_address: {0: ['websmart']}}
         mac_list = self.operations_with_ports.get_mac_on_port(ip_address, args)
         self.assertEqual(correct_answer, mac_list)
 

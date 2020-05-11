@@ -11,11 +11,12 @@ class OperationsWithPorts(InterfaceOperationsWithPorts):
     def __init__(self, controller: ControllerMain):
         self.controller = controller
 
-    def check_port_range(self, ports_range):
-        ports_range = ports_range.split('-')
-        if ports_range:
+    def check_port_range(self, ports):
+        ports_range = []
+        if ports:
+            ports_range_splited = ports.split('-')
             try:
-                ports_range = [int(port) for port in ports_range]
+                ports_range = [int(port) for port in ports_range_splited]
                 for i, port in enumerate(ports_range):
                     if port == 0:
                         ports_range[i] = 1
@@ -27,11 +28,10 @@ class OperationsWithPorts(InterfaceOperationsWithPorts):
 
     def get_mac_on_port(self, ip_address, args):
         mac_on_port = {ip_address: {}}
-        # print(ip_address)
+        queue: Queue = args['queue']
+        event: Event = args['event']
         if ip_address:
             ports_range = self.check_port_range(args['ports'])
-            queue: Queue = args['queue']
-            event: Event = args['event']
             if ports_range:
                 first_port = ports_range[0]
                 last_port = ports_range[1]
@@ -50,9 +50,13 @@ class OperationsWithPorts(InterfaceOperationsWithPorts):
                                 if self.controller.check_string_contain_item_from_list(data, list_read_until):
                                     self.controller.network_send_data('q\n')
                                 mac_list = self.match_mac_from_response(data)
-                                mac_on_port[ip_address][port] = mac_list
+                                if mac_list:
+                                    mac_on_port[ip_address][port] = mac_list
+                                    print(mac_on_port)
                     else:
                         mac_on_port[ip_address][0] = ['websmart']
+            else:
+                print('Неверный список портов')
         queue.put(mac_on_port)
         event.set()
         return mac_on_port
