@@ -46,6 +46,7 @@ class OperationsWithPorts(InterfaceOperationsWithPorts):
                             self.controller.network_send_data(cmd)
                             list_read_until = [b'Next', b'NEXT', b'#']
                             data = self.controller.network_receive_data_until(list_read_until)
+                            del list_read_until[-1]
                             if data:
                                 if self.controller.check_string_contain_item_from_list(data, list_read_until):
                                     self.controller.network_send_data('q\n')

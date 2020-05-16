@@ -110,13 +110,13 @@ class TestControllerMain(unittest.TestCase):
         self.assertFalse('172.1.0.151' in return_result)
         self.assertFalse('172.1.1.6' in return_result)
 
-    def test_make_network_address_start_octet_large_end_octet(self):
+    def test_make_network_address_start_octet_large_last_octet(self):
         ip_range = ('172.1.0.50', '172.1.0.3')
         return_result = self.controller.make_network_address(ip_range)
         self.assertFalse(return_result)
 
     def test_make_network_address_third_octet_different_and_last_octet_in_end_range_large_start_range(self):
-        ip_range = ('172.1.0.0', '172.1.1.5')
+        ip_range = ('172.1.0.0', '172.1.1.254')
         return_result = self.controller.make_network_address(ip_range)
         self.assertTrue(return_result)
         self.assertTrue('172.1.0.1' in return_result)
@@ -124,7 +124,7 @@ class TestControllerMain(unittest.TestCase):
         self.assertTrue('172.1.1.1' in return_result)
         self.assertTrue('172.1.1.5' in return_result)
         self.assertFalse('172.1.0.255' in return_result)
-        self.assertFalse('172.1.1.6' in return_result)
+        self.assertTrue('172.1.1.254' in return_result)
 
     def test_make_network_address_third_octet_different_and_last_octet_in_start_range_large_end_range(self):
         ip_range = ('172.1.2.0', '172.1.1.5')
